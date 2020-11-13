@@ -30,7 +30,7 @@ namespace Assign3_Sasha_Srinivas_n01458354.Controllers
         /// </summary>
         /// <example>GET Teacher/Show/{id}</example>
         /// <returns>
-        /// TeacherFName, TeacherLname, EmployeeNumber based on TeacherId
+        /// returns a student object based on TeacherId
         /// </returns>
 
         public ActionResult Show(int id)
