@@ -203,5 +203,65 @@ namespace Assign3_Sasha_Srinivas_n01458354.Controllers
 
             return true;
         }
+
+        /// <summary>
+        /// Updates an Teacher on the MySQL Database. Non-Deterministic.
+        /// </summary>
+        /// <param name="TeacherInfo">An object with fields that map to the columns of the Teacher's table.</param>
+        /// <example>
+        /// POST api/TeacherData/UpdateTeacher/208 
+        /// FORM DATA / POST DATA / REQUEST BODY 
+        /// {
+        ///	"TeacherFname":"Christine",
+        ///	"TeacherLname":"Bittle",
+        ///	"EmployeeNumber":"N029389!",
+        /// }
+        /// </example>
+        [HttpPost]
+        ///[EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateTeacher(int id, [FromBody] Teacher TeacherInfo)
+        {
+            bool isValid = ValidateUpdateInput(TeacherInfo);
+            if (isValid)
+            {
+
+                //Create an instance of a connection
+                MySqlConnection Conn = school.AccessDatabase();
+
+                //Debug.WriteLine(TeacherInfo.TeacherFname);
+
+                //Open the connection between the web server and database
+                Conn.Open();
+
+                //Establish a new command (query) for our database
+                MySqlCommand cmd = Conn.CreateCommand();
+
+                //SQL QUERY
+                cmd.CommandText = "update teachers set teacherfname=@TeacherFname, teacherlname=@TeacherLname, employeenumber=@EmployeeNumber where teacherid=@TeacherId";
+                cmd.Parameters.AddWithValue("@TeacherFname", TeacherInfo.TeacherFname);
+                cmd.Parameters.AddWithValue("@TeacherLname", TeacherInfo.TeacherLname);
+                cmd.Parameters.AddWithValue("@EmployeeNumber", TeacherInfo.EmployeeNumber);
+                cmd.Parameters.AddWithValue("@TeacherId", id);
+                cmd.Prepare();
+
+                cmd.ExecuteNonQuery();
+
+                Conn.Close();
+
+            }
+        }
+        private bool ValidateUpdateInput(Teacher TeacherInfo)
+        {
+            // Check that there is no missing information when a teacher is updated
+            if (String.IsNullOrEmpty(TeacherInfo.TeacherLname)
+                || String.IsNullOrEmpty(TeacherInfo.TeacherFname)
+                || String.IsNullOrEmpty(TeacherInfo.EmployeeNumber)
+                )
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

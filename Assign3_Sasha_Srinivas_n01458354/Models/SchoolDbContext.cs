@@ -25,6 +25,8 @@ namespace Assign3_Sasha_Srinivas_n01458354.Models
                     + "; database = " + Database
                     + "; port = " + Port
                     + "; password = " + Password;
+                  ///  + "; convert zero datetime = True;
+                
             }
         }
         
